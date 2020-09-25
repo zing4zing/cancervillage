@@ -1,0 +1,201 @@
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+        <meta http-equiv="x-ua-compatible" content="IE=edge" />
+        <meta content="yes" name="apple-mobile-web-app-capable" />
+        <meta content="telephone=no" name="format-detection" />
+        <meta content="email=no" name="format-detection" />
+        <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	    <title> </title>
+		<script src="js/jquery-1.7.2.min.js" language="javascript"></script>
+		<script src="js/d3.min.js" language="javascript"></script>
+		<script src="js/jquery.color.js" language="javascript"></script>
+		<script src="js/skrollr.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	
+
+		<div class="content-wrap">
+			<p class="retreat-title"> </p>
+		</div>
+
+		<div class="content-wrap retreat-wrap">
+			<img src="images/retreat/laohugou1.jpg" width="100%" style="opacity: 1">
+			<img src="images/retreat/laohugou2.jpg" width="100%" style="opacity: 0">
+			<img src="images/retreat/laohugou3.jpg" width="100%" style="opacity: 0">
+			<img src="images/retreat/laohugou4.png" width="100%" style="opacity: 0">
+			<div class="slider-wrap three-years pc-only">
+				<div class="track"></div>
+				<div class="bar"></div>
+				<ul>
+					<li>2003 -</li>
+					<li>2009 -</li>
+					<li>2012 -</li>
+					<li>2019 -</li>
+				</ul>
+			</div>
+		</div>
+
+		
+	
+</body>
+<script type="text/javascript">
+	window.onbeforeunload = function() {window.scrollTo(0,0);}
+
+	var isMobile = $(window).width()>640?false:true;
+	var maxWIDTH = isMobile? $(window).width():990
+	var maxHEIGHT = $(window).height()
+	
+	var WIDTH = $(window).width()
+	var HEIGHT = $(window).height()
+	var highlightFlag = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+	function pxToInt(str){
+		var tmp = str.split("px")
+		return parseInt(tmp[0])
+	}
+
+	if(!isMobile) initRetreatSlider()
+	else initRetreatSliderMobile()
+
+	function initRetreatSlider(){
+		var top;
+		var slideOn = false;
+		var mouseY;
+		var pos;
+		$(".retreat-wrap").find(".slider-wrap").bind("mousedown",function(){
+			$(".hand").remove()
+			slideOn = true
+			top = pxToInt($(this).find(".bar").css("top"))
+			mouseY = event.clientY;
+		})
+		$(".retreat-wrap").find(".slider-wrap").bind("mousemove",function(){
+
+			if(slideOn){
+				var move = Math.abs(mouseY-event.clientY)
+				if(mouseY-event.clientY<0&&top+move<=116){	
+					$(this).find(".bar").css("top",top+move)
+					pos = top+move-6
+					if(pos>=120){
+						slideOn = false
+					}
+				}
+				else if(mouseY-event.clientY>0&&top-move>=6){
+					$(this).find(".bar").css("top",top-move)
+					pos = top-move-6
+					if(pos<=0){
+						slideOn = false
+					}
+				}
+				
+
+
+				var type = $(this).hasClass("two-years")?2:3
+				if(type==2){
+					if(pos>=0&&pos<55){
+						$(this).parent().find("img").eq(2).css("opacity",0)
+						$(this).parent().find("img").eq(1).css("opacity",pos/55)
+					}
+					else if(pos>=55&&pos<=110){
+						$(this).parent().find("img").eq(2).css("opacity",(pos-55)/55)
+					}
+				}
+				else if(type==3){
+					if(pos>=0&&pos<36){
+						$(this).parent().find("img").eq(3).css("opacity",0)
+						$(this).parent().find("img").eq(2).css("opacity",0)
+						$(this).parent().find("img").eq(1).css("opacity",pos/36)
+					}
+					else if(pos>=36&&pos<72){
+						$(this).parent().find("img").eq(3).css("opacity",0)
+						$(this).parent().find("img").eq(2).css("opacity",(pos-36)/36)
+					}
+					else if(pos>=72&&pos<=110){
+						$(this).parent().find("img").eq(3).css("opacity",(pos-72)/36)
+					}
+				}	
+				
+			}
+		})
+		$(".retreat-wrap").find(".slider-wrap").bind("mouseup",function(){
+			slideOn = false
+			//console.log("mouseup",slideOn)
+		})
+	}
+
+	function initRetreatSliderMobile(){
+		$(".retreat-wrap").find(".slider-wrap").find("ul").find("li").bind("click",function(){
+			$(".hand").remove()
+			$(this).parent().find("li").removeClass("chosen")
+			$(this).addClass("chosen")
+
+			var total = $(this).parent().parent().hasClass("two-years")?3:4
+			var index = $(this).index()
+			
+			for(var i=index+1; i<total; i++){
+				$(this).parent().parent().parent().find("img").eq(i).animate({opacity:0},500)
+			}
+			for(var i=0; i<=index; i++){
+				$(this).parent().parent().parent().find("img").eq(i).animate({opacity:1},500)
+			}
+		})
+
+		$(".hand").bind("touchstart",function(){
+			$(".hand").remove()
+			$(".retreat-wrap").eq(0).find(".slider-wrap").eq(1).find("li").eq(0).removeClass("chosen")
+			$(".retreat-wrap").eq(0).find(".slider-wrap").eq(1).find("li").eq(1).addClass("chosen")			
+			$(".retreat-wrap").eq(0).find("img").eq(1).animate({opacity:1},500)			
+		})
+	}
+
+
+
+	$(document).scroll(function(){			
+		   
+			var top = $(document).scrollTop()
+			
+
+			
+			
+	
+			
+
+		
+
+	})
+
+
+
+	$(window).resize(function() {
+		WIDTH = $(window).width()
+	    HEIGHT = $(window).height()
+	    if(!isMobile){
+			$(".cover").find(".title").css("padding-top",HEIGHT/2-120*HEIGHT/700)
+
+			if(WIDTH<1300) {
+				$(".cover").find(".title").css("font-size","36px")
+				$(".cover").find(".subtitle").css("font-size","12px").css("padding-top",20)
+			}
+		}
+
+		$(".cover").css("height",HEIGHT)
+		if(!isMobile) $("#iceberg-icon-wrap, #glacier-popup").css("left",(WIDTH-1200)/2)
+		//base = $(document).find("#disaster-wrap").offset().top
+	    //disasterTop = $(document).find("#disaster-wrap").offset().top - $(document).find("#glaciers-info").height()
+		//disasterEnd = $(document).find("#disaster-wrap").offset().top - $(document).find("#glaciers-info").height() + $(document).find("#disaster-scroll").height() 
+
+		//glaciersTop = $(document).find("#glaciers-info").offset().top
+		//glaciersEnd = $(document).find("#glaciers-info").offset().top + $(document).find("#glaciers-scroll").height() 
+
+	})
+
+
+	
+
+
+</script>
+
+
+</html>
